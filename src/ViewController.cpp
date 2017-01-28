@@ -5,6 +5,8 @@
 #include "poScene/ShapeView.h"
 #include "poScene/TextView.h"
 
+
+
 namespace aperture {
 	ViewControllerRef ViewController::create()
 	{
@@ -14,48 +16,243 @@ namespace aperture {
 	}
 
 	ViewController::ViewController()
-		: mPreviousSquare(nullptr)
 	{
 	}
+    
 
 	void ViewController::setup()
 	{
-		//	Number of squares
-		int numSquares = 5;
+        ci::app::console() << "ViewController::setup()" << std::endl;
+        
+        screenWidth = 1200;
+        screenHeight = 177;
+        
+        
+        margin = 25;
+        gridSizeX = 12.5;
+        gridSizeY = (sqrt(3))*(float)gridSizeX/2.0f;
+        offset = gridSizeX / 2;
+        
+        numCols = (screenWidth-margin*2)/gridSizeX;
+        numRows = (screenHeight-margin*2)/gridSizeY + 2;
 
-		//	Maximum square size
-		float maxSize = 300.f;
+        mAnimState = 0;
+        
+        mContainer = View::create();
+        getView()->addSubview(mContainer);
+        
+        
 
-		//	Create the container
-		mContainer = View::create();
-		getView()->addSubview(mContainer);
+        
+        for(int i=0;i<numRows;i++){
+            for(int j=0;j<numCols;j++){
+                BubbleRef b = Bubble::create(12.5);
+                bubbles.push_back(b);
+                mContainer->addSubview(b);
+                
+                
+                int x = j*gridSizeX + (i%2 * offset)+margin;
+                int y = i*gridSizeY + margin;
+                
+                b->setPosition(x,y);
+                
+            }
+        }
+        
+        ci::app::getWindow()->getSignalKeyDown().connect(std::bind(&ViewController::keyPressed, this, std::placeholders::_1));
 
-		//	Add the first square to the container
-		//	Add subsequent squares to the previous square
-		for (int i = 0; i < numSquares; i++) {
-			int size = maxSize - (i * (maxSize / numSquares));
-			SquareRef square = Square::create(size);
-			if (mPreviousSquare != nullptr) {
-				mPreviousSquare->addSubview(square);
-			}
-			else {
-				mContainer->addSubview(square);
-			}
-			mPreviousSquare = square;
-		}
+        
+    }
+    void ViewController::update()
+    {
+       // ci::app::console() << "ViewController::update()" << std::endl;
+        
+        switch(mAnimState){
+            case 1:
+                scrollUp();
+                break;
+            case 2:
+                scrollRight();
+                  break;
+            case 3:
+                scrollDown();
+                  break;
+            case 4:
+                scrollLeft();
+                
+                break;
+          
+            case 0:
+                // do nothing
+                break;
+            
+        }
+        
+         
+        
+    }
+    void ViewController::draw()
+    {
+        ci::app::console() << "ViewController::draw()" << std::endl;
+    }
+    
+    void ViewController::scrollUp(){
+        int numBubbles = bubbles.size();
 
-		//	Center everything
-		mContainer->setPosition(ci::app::getWindowWidth() / 2, ci::app::getWindowHeight() / 2);
+        float buffer[numCols];
+        
+        for(int i=0;i<numCols;i++){
+            buffer[i] = bubbles.at(i)->getDestSize();
+        }
 
-		//	Text box with instructions
-		ci::TextBox ciTextBox = ci::TextBox();
-		ciTextBox.text("Click and drag the squares to highlight child nodes and alter their position within the hierarchy.");
-		ciTextBox.size(200, 200);
-		ciTextBox.font(ci::Font("Arial", 12.f));
-		ciTextBox.color(ci::Color(1, 1, 1));
+                for(int i=0;i<numBubbles-numCols;i++){
+            BubbleRef b = bubbles.at(i);
+            BubbleRef b2 = bubbles.at(i+numCols);
+            b->setDestSize(b2->getDestSize());
+        }
+        for(int i=0;i<numCols;i++){
+             bubbles.at(numBubbles-numCols + i)->setDestSize(buffer[i]);
+        }
+        
+        
+    }
 
-		TextViewRef textBox = TextView::create(ciTextBox);
-		textBox->setPosition(20, 20);
-		getView()->addSubview(textBox);
-	}
+    void ViewController::scrollDown(){
+        int numBubbles = bubbles.size();
+        
+        float buffer[numCols];
+        
+        for(int i=0;i<numCols;i++){
+            buffer[i] = bubbles.at(numBubbles-numCols + i)->getDestSize();
+        }
+        
+        for(int i=numBubbles-1;i>numCols-1;i--){
+            BubbleRef b = bubbles.at(i);
+            BubbleRef b2 = bubbles.at(i-numCols);
+            b->setDestSize(b2->getDestSize());
+        }
+        for(int i=0;i<numCols;i++){
+            bubbles.at(i)->setDestSize(buffer[i]);
+        }
+        
+        
+    }
+    void ViewController::scrollLeft(){
+    // TODO: implement me
+    }
+    void ViewController::scrollRight(){
+    // TODO: implement me
+    }
+    
+    
+    void ViewController::keyPressed(ci::app::KeyEvent &key){
+        ci::app::console() << key.getChar() << std::endl;
+        int numBubbles;
+        ci::app::console() << key.getCode() << std::endl;
+        switch(key.getCode()){
+       
+                case 'r':
+                case 'R':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    b->randomize();
+                }
+                break;
+                case '0':
+                case ')':
+                    numBubbles = bubbles.size();
+                    ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                    for(int i=0;i<numBubbles;i++){
+                        BubbleRef b = bubbles.at(i);
+                        b->shrink();
+                    }
+                break;
+            case '1':
+            case '!':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    b->setDestSize(12.5f);
+                }
+                break;
+
+            case '5':
+            case '%':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    b->setDestSize(6.25f);
+                }
+                break;
+
+            case 269: // dash
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI)*12.5f;
+                    b->setDestSize(yScale);
+                }
+                break;
+
+            case '/':
+            case '?':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float xPos = b->getPosition().x;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-xPos)*12.5f;
+                    b->setDestSize(yScale);
+                }
+                break;
+            case '\\':
+            case '|':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float xPos = b->getPosition().x;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+xPos/2.0f)*12.5f;
+                    b->setDestSize(yScale);
+                }
+                break;
+            case 'i':
+            case 'I':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float xPos = b->getPosition().x;
+                    float yScale = sin(xPos/ci::app::getWindowWidth()*M_PI)*12.5f;
+                    b->setDestSize(yScale);
+                }
+                break;
+            case 32: // press space
+                mAnimState = 0; // stop animation
+                break;
+            case 273:
+                mAnimState = 1; // scroll up
+                break;
+            case 274: // down
+                mAnimState = 3;
+                break;
+            case 275: // right
+                mAnimState = 2;
+                break;
+            case 276: // left
+                mAnimState = 4;
+                break;
+
+
+        }
+    }
 }

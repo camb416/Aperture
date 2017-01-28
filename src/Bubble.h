@@ -28,10 +28,12 @@ public:
     
     virtual void setup(int size);
     virtual void update();
-   // virtual void draw();
-            void randomize();
-    void shrink();
-    void setSize(float destSize);
+    // virtual void draw();
+    void  randomize();
+    
+    void  shrink();
+    void  setDestSize(float destSize);
+    float getDestSize(){ return mDestSize; };
     
     
 protected:

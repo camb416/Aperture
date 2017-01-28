@@ -100,8 +100,9 @@ void Bubble::randomize(){
     mDestSize = ci::randFloat(12.5f);
 }
 void Bubble::shrink(){
-    setSize(0.0f);
+    setDestSize(0.0f);
 }
-void Bubble::setSize(float destSize){
+void Bubble::setDestSize(float destSize){
     mDestSize = destSize;
 }
+
