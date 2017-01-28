@@ -12,6 +12,8 @@ public:
     static ApertureRef create();
     
     void setup();
+    void update();
+    void draw();
     
 protected:
 	Aperture();

@@ -3,7 +3,8 @@
 #include "cinder/gl/gl.h"
 
 #include "poScene/Scene.h"
-#include "Aperture.h"
+#include "ViewController.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -14,28 +15,37 @@ class ApertureApp
 : public App 
 {
   public:
-	void setup() override;
-	void update() override;
-	void draw() override;
+    void setup();
+    void update();
+	void draw();
     
-    SceneRef scene;
+    SceneRef mScene;
+    aperture::ViewControllerRef mViewController;
 };
 
 void ApertureApp::setup()
 {
-    scene = Scene::create(Aperture::create());
+    
+    int screenWidth = 1200;
+    int numScreens = 12;
+    int screenHeight = (screenWidth * 16) / (9 * numScreens);
+    
+    setWindowSize(screenWidth, screenHeight );
+
+    mViewController = aperture::ViewController::create();
+    mScene = Scene::create(mViewController);
 }
 
 void ApertureApp::update()
 {
-    scene->update();
+    mScene->update();
 }
 
 void ApertureApp::draw()
 {
 	// clear out the window with black
 	gl::clear( Color( 0, 0, 0 ) );
-    scene->draw();
+    mScene->draw();
 }
 
-CINDER_APP( ApertureApp, RendererGl )
+CINDER_APP( ApertureApp, RendererGl( RendererGl::Options().msaa( 16 ) ) )
