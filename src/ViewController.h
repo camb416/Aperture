@@ -54,6 +54,7 @@ namespace aperture {
         int margin;
         
         int mAnimState;
+        int skipFrames;
 
         
 

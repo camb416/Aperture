@@ -37,6 +37,7 @@ namespace aperture {
         numRows = (screenHeight-margin*2)/gridSizeY + 2;
 
         mAnimState = 0;
+        skipFrames = 2;
         
         mContainer = View::create();
         getView()->addSubview(mContainer);
@@ -67,6 +68,7 @@ namespace aperture {
     {
        // ci::app::console() << "ViewController::update()" << std::endl;
         
+        if(ci::app::getElapsedFrames()%(1+skipFrames) == 0){
         switch(mAnimState){
             case 1:
                 scrollUp();
@@ -87,6 +89,7 @@ namespace aperture {
                 break;
             
         }
+        }
         
          
         
@@ -99,19 +102,19 @@ namespace aperture {
     void ViewController::scrollUp(){
         int numBubbles = bubbles.size();
 
-        float buffer[numCols];
+        float buffer[numCols*2];
         
-        for(int i=0;i<numCols;i++){
+        for(int i=0;i<numCols*2;i++){
             buffer[i] = bubbles.at(i)->getDestSize();
         }
 
-                for(int i=0;i<numBubbles-numCols;i++){
+                for(int i=0;i<numBubbles-numCols*2;i++){
             BubbleRef b = bubbles.at(i);
-            BubbleRef b2 = bubbles.at(i+numCols);
+            BubbleRef b2 = bubbles.at(i+numCols*2);
             b->setDestSize(b2->getDestSize());
         }
-        for(int i=0;i<numCols;i++){
-             bubbles.at(numBubbles-numCols + i)->setDestSize(buffer[i]);
+        for(int i=0;i<numCols*2;i++){
+             bubbles.at(numBubbles-numCols*2 + i)->setDestSize(buffer[i]);
         }
         
         
@@ -120,18 +123,18 @@ namespace aperture {
     void ViewController::scrollDown(){
         int numBubbles = bubbles.size();
         
-        float buffer[numCols];
+        float buffer[numCols*2];
         
-        for(int i=0;i<numCols;i++){
-            buffer[i] = bubbles.at(numBubbles-numCols + i)->getDestSize();
+        for(int i=0;i<numCols*2;i++){
+            buffer[i] = bubbles.at(numBubbles-numCols*2 + i)->getDestSize();
         }
         
-        for(int i=numBubbles-1;i>numCols-1;i--){
+        for(int i=numBubbles-1;i>numCols*2-1;i--){
             BubbleRef b = bubbles.at(i);
-            BubbleRef b2 = bubbles.at(i-numCols);
+            BubbleRef b2 = bubbles.at(i-numCols*2);
             b->setDestSize(b2->getDestSize());
         }
-        for(int i=0;i<numCols;i++){
+        for(int i=0;i<numCols*2;i++){
             bubbles.at(i)->setDestSize(buffer[i]);
         }
         
@@ -208,7 +211,7 @@ namespace aperture {
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
                     float xPos = b->getPosition().x;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-xPos)*12.5f;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-(float)xPos/16.0f)*12.5f;
                     b->setDestSize(yScale);
                 }
                 break;
@@ -220,7 +223,7 @@ namespace aperture {
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
                     float xPos = b->getPosition().x;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+xPos/2.0f)*12.5f;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+(float)xPos/2.0f)*12.5f;
                     b->setDestSize(yScale);
                 }
                 break;

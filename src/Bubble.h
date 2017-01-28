@@ -45,6 +45,8 @@ private:
     float mSize;
     float mDestSize;
     
+    float mTweenVal;
+    
     // Circle Shape
     ShapeViewRef mShape;
     

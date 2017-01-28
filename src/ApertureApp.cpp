@@ -18,6 +18,7 @@ class ApertureApp
     void setup();
     void update();
 	void draw();
+    void prepareSettings(ApertureApp::Settings *settings);
     
     SceneRef mScene;
     aperture::ViewControllerRef mViewController;
@@ -47,5 +48,10 @@ void ApertureApp::draw()
 	gl::clear( Color( 0, 0, 0 ) );
     mScene->draw();
 }
+void prepareSettings( ApertureApp::Settings *settings )
+{
+    settings->setHighDensityDisplayEnabled(); // try removing this line
+    settings->setMultiTouchEnabled( false );
+}
 
-CINDER_APP( ApertureApp, RendererGl( RendererGl::Options().msaa( 16 ) ) )
+CINDER_APP( ApertureApp, RendererGl( RendererGl::Options().msaa( 16 ) ), prepareSettings )

@@ -53,13 +53,13 @@ void Bubble::setup(int size)
     // ask someone smart WTF is going on here
     getSignal(MouseEvent::DOWN_INSIDE).connect(std::bind(&Bubble::onMouseDown, this, std::placeholders::_1));
     
-
+    mTweenVal = ci::randFloat(4.0f)+4.0f;
     
 
 }
 void Bubble::update(){
   //  ci::app::console() << "bubble update" << std::endl;
-    mSize += (mDestSize-mSize)/4.0f;
+    mSize += (mDestSize-mSize)/mTweenVal;
     mShape->setSize(ci::vec2(mSize));
     mShape->setScale(mSize);
     mShape->setFillColor(ci::Color(1,1,1));
