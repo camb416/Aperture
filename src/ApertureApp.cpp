@@ -27,11 +27,7 @@ class ApertureApp
 void ApertureApp::setup()
 {
     
-    int screenWidth = 1200;
-    int numScreens = 12;
-    int screenHeight = (screenWidth * 16) / (9 * numScreens);
-    
-    setWindowSize(screenWidth, screenHeight );
+
 
     mViewController = aperture::ViewController::create();
     mScene = Scene::create(mViewController);
@@ -52,6 +48,14 @@ void prepareSettings( ApertureApp::Settings *settings )
 {
     settings->setHighDensityDisplayEnabled(); // try removing this line
     settings->setMultiTouchEnabled( false );
+    
+    int gridWidth = 1200;
+    int numScreens = 12;
+    int gridHeight = (gridWidth * 16) / (9 * numScreens);
+    
+
+    
+    settings->setWindowSize(gridWidth, gridHeight);
 }
 
 CINDER_APP( ApertureApp, RendererGl( RendererGl::Options().msaa( 16 ) ), prepareSettings )

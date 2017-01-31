@@ -33,14 +33,17 @@ namespace aperture {
         void keyPressed(ci::app::KeyEvent &key);
         
         std::vector<BubbleRef> bubbles;
+        std::vector<float> bubbleBuffer;
         
         void scrollUp();
         void scrollRight();
         void scrollDown();
         void scrollLeft();
+        void life();
+        void threshold();
         
-        int screenWidth;
-        int screenHeight;
+        int screenWidth, screenHeight;
+        int gridWidth, gridHeight;
         
         
         int numCols, numRows;
