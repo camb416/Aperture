@@ -2,6 +2,7 @@
 
 #include "cinder/app/App.h"
 
+
 #include "poScene/ShapeView.h"
 #include "poScene/TextView.h"
 
@@ -20,10 +21,18 @@ namespace aperture {
 	}
     
 
+    void ViewController::button(){
+        
+    }
+    
 	void ViewController::setup()
 	{
         ci::app::console() << "ViewController::setup()" << std::endl;
+     
+       // WallUI::Instance().setup();
         
+        
+   
         gridWidth = 1200;
         gridHeight = 177;
         
@@ -106,6 +115,9 @@ namespace aperture {
     void ViewController::draw()
     {
         ci::app::console() << "ViewController::draw()" << std::endl;
+  //      WallUI::Instance().draw();
+        
+    //  mParams->draw();
     }
     
     void ViewController::scrollUp(){
@@ -195,6 +207,44 @@ namespace aperture {
 
     }
     
+    void ViewController::setPreset(int which){
+
+        int numBubbles = bubbles.size();
+
+        switch(which){
+            case 0:
+                // do nothing
+                break;
+            case 1: // all off
+                    for(int i=0;i<numBubbles;i++){
+                        BubbleRef b = bubbles.at(i);
+                        b->shrink();
+                    }
+            break;
+            case 2: // all on
+
+            break;
+            case 3: // all 50%
+
+            break;
+            case 4: // horiz
+
+            break;
+            case 5: // vert
+
+            break;
+            case 6: // uphill
+
+            break;
+            case 7: // downhill
+
+            break;
+            default:
+                // catch any werid vals
+                break;
+        }
+    }
+    
     void ViewController::keyPressed(ci::app::KeyEvent &key){
         ci::app::console() << key.getChar() << std::endl;
         int numBubbles;
@@ -211,11 +261,7 @@ namespace aperture {
                 break;
                 case '0':
                 case ')':
-                    numBubbles = bubbles.size();
-                    for(int i=0;i<numBubbles;i++){
-                        BubbleRef b = bubbles.at(i);
-                        b->shrink();
-                    }
+                    setPreset(1);
                 break;
             case '1':
             case '!':
@@ -235,12 +281,12 @@ namespace aperture {
                 }
                 break;
 
-            case 269: // dash
+            case 269: // dash '-'
                 numBubbles = bubbles.size();
                 for(int i=0;i<numBubbles;i++){
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI)*12.5f;
+                    float yScale = sin(yPos/gridHeight*M_PI)*12.5f;
                     b->setDestSize(yScale);
                 }
                 break;
