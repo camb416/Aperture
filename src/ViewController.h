@@ -37,6 +37,7 @@ namespace aperture {
         void randomize();
         
         void setSkipFrames(int skipFrames){ mSkipFrames = skipFrames; };
+        void setTweenVals(float tweenVals);
 
 
 	protected:

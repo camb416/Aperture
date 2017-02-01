@@ -56,6 +56,7 @@ private:
     int mPresetSelection, mAnimationSelection;
     vector<string> mPresetNames, mAnimationNames;
     int mSkipFrames;
+    float mTweenVal;
     
     
     
