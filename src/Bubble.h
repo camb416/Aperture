@@ -58,9 +58,9 @@ private:
     bool mIsPressed;
     ci::vec2 mStartPos, mEndPos, mInitialPos;
     
-    void onMouseDown(MouseEvent &evt);
-    void onMouseUp(MouseEvent &evt);
-    void onMouseDragged(MouseEvent &evt);
+    void onMouseDown(po::scene::MouseEvent &evt);
+    void onMouseUp(po::scene::MouseEvent &evt);
+    void onMouseDragged(po::scene::MouseEvent &evt);
     void highlight(bool isHighlighted);
     void highlightChildren(bool isHighlighted);
     void highlightParent();

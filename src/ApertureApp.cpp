@@ -1,49 +1,9 @@
-// cinder
-#include "cinder/app/App.h"
-#include "cinder/app/RendererGl.h"
-#include "cinder/gl/gl.h"
-#include "cinder/params/Params.h"
-
-// poscene
-#include "poScene/Scene.h"
-
-// application
-#include "ViewController.h"
-
-
-using namespace ci;
-using namespace ci::app;
-using namespace std;
-using namespace po::scene;
-
-class ApertureApp
-: public App 
-{
-  public:
-    void setup();
-    void update();
-	void draw();
-    void prepareSettings(ApertureApp::Settings *settings);
-    
-    SceneRef mScene;
-    aperture::ViewControllerRef mViewController;
-    
-private:
-    
-    ci::params::InterfaceGlRef mParams;
-    void randomize();
-    void threshold();
-    
-    int mPresetSelection, mAnimationSelection;
-    vector<string> mPresetNames, mAnimationNames;
-    
-    void updateGUI(int a, int b);
-    
-    
-};
+#include "ApertureApp.h"
 
 void ApertureApp::setup()
 {
+    
+    mSkipFrames = 0;
     
     // Create the interface and give it a name.
   //  mParams = params::InterfaceGl::create( getWindow(), "App parameters", toPixels( ivec2( 200, 400 ) ) );
@@ -52,9 +12,7 @@ void ApertureApp::setup()
     mScene = Scene::create(mViewController);
     
     mParams = ci::params::InterfaceGl::create( ci::app::getWindow(), "App parameters", ci::app::toPixels( ci::ivec2( 200, 400 ) ) );
-    mParams->addButton( "Randomize", bind( &ApertureApp::randomize, this ) );
-    mParams->addButton("Threshold", bind(&ApertureApp::threshold, this));
-    // Add an enum (list) selector.
+     // Add an enum (list) selector.
     mPresetSelection = 0;
     mPresetNames = { "none", "all off", "all on", "all 50%", "horizontal","vertical", "uphill", "downhill" };
     
@@ -68,9 +26,19 @@ void ApertureApp::setup()
     } );
     
     mParams->addParam( "Animation", mAnimationNames, &mAnimationSelection )
-    .updateFn( [this] { console() << "animation updated: " << mAnimationNames[mAnimationSelection] << std::endl;
+    .updateFn( [this] {
+        console() << "animation updated: " << mAnimationNames[mAnimationSelection] << std::endl;
         mViewController->setAnimationState(mAnimationSelection);
     } );
+    
+    mParams->addButton( "Randomize", bind( &ApertureApp::randomize, this ) );
+    mParams->addButton("Threshold", bind(&ApertureApp::threshold, this));
+   
+    mParams->addParam("Skip Frames", &mSkipFrames, false).updateFn([this] {
+        console() << "updating skipframes" << std::endl;
+        mViewController->setSkipFrames(mSkipFrames);
+    });
+    
     mParams->setPosition(ivec2(1930,620));
     
 

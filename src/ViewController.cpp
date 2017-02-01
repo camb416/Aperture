@@ -45,7 +45,7 @@ namespace aperture {
         numRows = (gridHeight-margin*2)/gridSizeY + 2;
 
         mAnimState = 0;
-        skipFrames = 2;
+        mSkipFrames = 0;
         
         mContainer = View::create();
         getView()->addSubview(mContainer);
@@ -82,7 +82,7 @@ namespace aperture {
             bubbleBuffer.at(i) = bubbles.at(i)->getDestSize();
         }
         
-        if(ci::app::getElapsedFrames()%(1+skipFrames) == 0){
+        if(ci::app::getElapsedFrames()%(1+mSkipFrames) == 0){
         switch(mAnimState){
             case 1:
                 scrollUp();
@@ -282,7 +282,7 @@ namespace aperture {
                 // catch any werid vals
                 break;
         }
-        app->updateGUI(mAnimState,whichPreset);
+        // app->updateGUI(mAnimState,which);
     }
     void ViewController::setAnimationState(int animationSelection){
         mAnimState = animationSelection;

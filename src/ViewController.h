@@ -4,7 +4,11 @@
 
 #include "poScene/ViewController.h"
 
+// #include "ApertureApp.h"
+
 #include "Bubble.h"
+
+
 
 
 class ApertureApp;
@@ -31,6 +35,8 @@ namespace aperture {
 
         void threshold();
         void randomize();
+        
+        void setSkipFrames(int skipFrames){ mSkipFrames = skipFrames; };
 
 
 	protected:
@@ -38,7 +44,7 @@ namespace aperture {
 
 	private:
         
-        ApertureApp* app;
+       // ApertureApp* app;
 
         void button();
         
@@ -74,7 +80,7 @@ namespace aperture {
         int margin;
         
         int mAnimState;
-        int skipFrames;
+        int mSkipFrames;
 
         
 

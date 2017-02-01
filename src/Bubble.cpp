@@ -53,7 +53,7 @@ void Bubble::setup(int size)
     // ask someone smart WTF is going on here
  //   getSignal(MouseEvent::DOWN_INSIDE).connect(std::bind(&Bubble::onMouseDown, this, std::placeholders::_1));
     
-    mTweenVal = ci::randFloat(4.0f)+4.0f;
+    mTweenVal = ci::randFloat(16.0f)+16.0f;
     
 
 }
