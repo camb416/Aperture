@@ -334,6 +334,12 @@ namespace aperture {
         mAnimState = animationSelection;
     }
     
+    void ViewController::setTweenVals(float tweenVal){
+        for(int i=0;i<bubbles.size();i++){
+            bubbles.at(i)->setTweenVal(tweenVal);
+        }
+    }
+    
     void ViewController::keyPressed(ci::app::KeyEvent &key){
         ci::app::console() << key.getChar() << std::endl;
         int numBubbles;
