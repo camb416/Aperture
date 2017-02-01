@@ -39,7 +39,9 @@ namespace aperture {
         margin = 25;
         gridSizeX = 12.5;
         gridSizeY = (sqrt(3))*(float)gridSizeX/2.0f;
-        offset = gridSizeX / 2;
+        
+        //offset = gridSizeX / 2;
+        offset = 0.0f;
         
         numCols = (gridWidth-margin*2)/gridSizeX;
         numRows = (gridHeight-margin*2)/gridSizeY + 2;
