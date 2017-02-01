@@ -4,6 +4,7 @@ void ApertureApp::setup()
 {
     
     mSkipFrames = 0;
+    mTweenVal = 4.0f;
     
     // Create the interface and give it a name.
   //  mParams = params::InterfaceGl::create( getWindow(), "App parameters", toPixels( ivec2( 200, 400 ) ) );
@@ -34,10 +35,20 @@ void ApertureApp::setup()
     mParams->addButton( "Randomize", bind( &ApertureApp::randomize, this ) );
     mParams->addButton("Threshold", bind(&ApertureApp::threshold, this));
    
-    mParams->addParam("Skip Frames", &mSkipFrames, false).updateFn([this] {
-        console() << "updating skipframes" << std::endl;
-        mViewController->setSkipFrames(mSkipFrames);
-    });
+    mParams->addParam("Skip Frames", &mSkipFrames, false)
+        .min(0)
+        .max(60)
+        .updateFn([this] {
+            console() << "updating skipframes" << std::endl;
+            mViewController->setSkipFrames(mSkipFrames);
+        });
+    
+    mParams->addParam("Tween coeff.", &mTweenVal, false)
+        .min( 1.0f )
+        .max( 64.0f )
+        .updateFn([this] {
+            mViewController->setTweenVals(mTweenVal);
+        });
     
     mParams->setPosition(ivec2(1930,620));
     

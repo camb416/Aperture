@@ -35,6 +35,7 @@ public:
     void  setDestSize(float destSize);
     float getDestSize(){ return mDestSize; };
     void threshold();
+    void setTweenVal(float tweenVal);
     
     
 protected:

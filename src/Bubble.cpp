@@ -66,6 +66,9 @@ void Bubble::update(){
 //    mShape->render();
 
 }
+void Bubble::setTweenVal(float tweenVal){
+    mTweenVal = tweenVal;
+}
 
 //void Bubble::draw(){
 //   // ci::app::console() << "bubble draw" << std::endl;
