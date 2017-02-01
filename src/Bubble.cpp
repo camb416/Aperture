@@ -51,7 +51,7 @@ void Bubble::setup(int size)
     
     // TODO:
     // ask someone smart WTF is going on here
-    getSignal(MouseEvent::DOWN_INSIDE).connect(std::bind(&Bubble::onMouseDown, this, std::placeholders::_1));
+ //   getSignal(MouseEvent::DOWN_INSIDE).connect(std::bind(&Bubble::onMouseDown, this, std::placeholders::_1));
     
     mTweenVal = ci::randFloat(4.0f)+4.0f;
     
@@ -97,12 +97,19 @@ void Bubble::highlightChildren(bool isHighlighted)
 }
 
 void Bubble::randomize(){
-    mDestSize = ci::randFloat(12.5f);
+    mDestSize = ci::randFloat(12);
 }
 void Bubble::shrink(){
     setDestSize(0.0f);
 }
 void Bubble::setDestSize(float destSize){
     mDestSize = destSize;
+}
+void Bubble::threshold(){
+    if(mDestSize>=0.5f*12){
+        mDestSize = 12;
+    } else {
+        mDestSize = 0.0f;
+    }
 }
 
