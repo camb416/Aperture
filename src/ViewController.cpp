@@ -7,7 +7,6 @@
 #include "poScene/TextView.h"
 
 
-
 namespace aperture {
 	ViewControllerRef ViewController::create()
 	{
@@ -172,12 +171,18 @@ namespace aperture {
         int numBubbles = bubbles.size();
         for(int i=0;i<numBubbles;i++){
             BubbleRef b = bubbles.at(i);
-            if(b->getDestSize()<12.5f/2.0f){
-                b->setDestSize(0.0f);
-            } else {
-                b->setDestSize(12.5f);
-            }
+            b->threshold();
         }
+    }
+    
+    void ViewController::randomize(){
+        int numBubbles = bubbles.size();
+
+        for(int i=0;i<numBubbles;i++){
+            BubbleRef b = bubbles.at(i);
+            b->randomize();
+        }
+ 
     }
     
     void ViewController::life(){
@@ -222,27 +227,65 @@ namespace aperture {
                     }
             break;
             case 2: // all on
-
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    b->setDestSize(12.5f);
+                }
             break;
             case 3: // all 50%
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    b->setDestSize(6.25f);
+                }
 
             break;
             case 4: // horiz
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float yScale = sin(yPos/gridHeight*M_PI)*12.5f;
+                    b->setDestSize(yScale);
+                }
 
             break;
             case 5: // vert
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float xPos = b->getPosition().x;
+                    float yScale = sin(xPos/ci::app::getWindowWidth()*M_PI)*12.5f;
+                    b->setDestSize(yScale);
+                }
 
             break;
             case 6: // uphill
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float xPos = b->getPosition().x;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-(float)xPos/16.0f)*12.5f;
+                    b->setDestSize(yScale);
+                }
 
             break;
             case 7: // downhill
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    float yPos = b->getPosition().y;
+                    float xPos = b->getPosition().x;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+(float)xPos/2.0f)*12.5f;
+                    b->setDestSize(yScale);
+                }
 
             break;
             default:
                 // catch any werid vals
                 break;
         }
+        app->updateGUI(mAnimState,whichPreset);
+    }
+    void ViewController::setAnimationState(int animationSelection){
+        mAnimState = animationSelection;
     }
     
     void ViewController::keyPressed(ci::app::KeyEvent &key){
@@ -253,11 +296,7 @@ namespace aperture {
        
                 case 'r':
                 case 'R':
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    b->randomize();
-                }
+                randomize();
                 break;
                 case '0':
                 case ')':
@@ -265,64 +304,32 @@ namespace aperture {
                 break;
             case '1':
             case '!':
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    b->setDestSize(12.5f);
-                }
+          
+                setPreset(2);
                 break;
 
             case '5':
             case '%':
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    b->setDestSize(6.25f);
-                }
+               
+                setPreset(3);
                 break;
 
             case 269: // dash '-'
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    float yPos = b->getPosition().y;
-                    float yScale = sin(yPos/gridHeight*M_PI)*12.5f;
-                    b->setDestSize(yScale);
-                }
+                setPreset(4);
                 break;
 
             case '/':
             case '?':
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    float yPos = b->getPosition().y;
-                    float xPos = b->getPosition().x;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-(float)xPos/16.0f)*12.5f;
-                    b->setDestSize(yScale);
-                }
+                setPreset(6);
                 break;
             case '\\':
             case '|':
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    float yPos = b->getPosition().y;
-                    float xPos = b->getPosition().x;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+(float)xPos/2.0f)*12.5f;
-                    b->setDestSize(yScale);
-                }
+
+                setPreset(7);
                 break;
             case 'i':
             case 'I':
-                numBubbles = bubbles.size();
-                for(int i=0;i<numBubbles;i++){
-                    BubbleRef b = bubbles.at(i);
-                    float yPos = b->getPosition().y;
-                    float xPos = b->getPosition().x;
-                    float yScale = sin(xPos/ci::app::getWindowWidth()*M_PI)*12.5f;
-                    b->setDestSize(yScale);
-                }
+                setPreset(5);
                 break;
             case 'l':
             case 'L':

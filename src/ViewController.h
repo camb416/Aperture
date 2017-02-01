@@ -7,6 +7,9 @@
 #include "Bubble.h"
 
 
+class ApertureApp;
+
+
 
 namespace aperture {
 
@@ -25,13 +28,17 @@ namespace aperture {
         
         void setPreset(int presetSelection);
         void setAnimationState(int animationSelection);
-        
+
+        void threshold();
+        void randomize();
 
 
 	protected:
 		ViewController();
 
 	private:
+        
+        ApertureApp* app;
 
         void button();
         
@@ -50,7 +57,7 @@ namespace aperture {
         void scrollDown();
         void scrollLeft();
         void life();
-        void threshold();
+       
         
         int screenWidth, screenHeight;
         int gridWidth, gridHeight;
