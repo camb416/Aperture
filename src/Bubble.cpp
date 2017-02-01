@@ -41,7 +41,7 @@ void Bubble::setup(int size)
     mSize = 1;
 
     //mShape = ShapeView::createCircle(mSize);
-    mShape = ShapeView::createRect(12.5f, ci::randFloat(1.0f)*12.5f, ci::randFloat(1.0f));
+    mShape = ShapeView::createRect(8.0f, 12.5f, 4.0f);
     mShape->setAlignment(Alignment::CENTER_CENTER);
 
     mColor = ci::Color(ci::CM_HSV, 1,0,1);
@@ -62,7 +62,8 @@ void Bubble::update(){
   //  ci::app::console() << "bubble update" << std::endl;
     mSize += (mDestSize-mSize)/mTweenVal;
     // mShape->setSize(ci::vec2(mSize));
-    //mShape->setScale(mSize);
+    mShape->setPosition(ci::vec2(0,(mSize-6.25f)*2.0f));
+    mShape->setScale(1.0f,mSize/12.5f);
     mShape->setFillColor(ci::ColorA(1,1,1,mSize/12.5f));
     // ci::app::console() << mSize << std::endl;
     // mShape->setFillColor(ci::Color(1,1,1));
