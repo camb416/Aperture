@@ -34,6 +34,7 @@ public:
     void  shrink();
     void  setDestSize(float destSize);
     float getDestSize(){ return mDestSize; };
+    void threshold();
     
     
 protected:

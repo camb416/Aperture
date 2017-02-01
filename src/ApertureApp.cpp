@@ -31,7 +31,8 @@ void ApertureApp::setup()
     int numScreens = 12;
     int screenHeight = (screenWidth * 16) / (9 * numScreens);
     
-    setWindowSize(screenWidth, screenHeight );
+    screenWidth = 1024;
+    screenHeight = 1024;
 
     mViewController = aperture::ViewController::create();
     mScene = Scene::create(mViewController);
@@ -50,6 +51,9 @@ void ApertureApp::draw()
 }
 void prepareSettings( ApertureApp::Settings *settings )
 {
+    
+    
+    settings->setWindowSize( 1024, 1024 );
     settings->setHighDensityDisplayEnabled(); // try removing this line
     settings->setMultiTouchEnabled( false );
 }

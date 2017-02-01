@@ -27,9 +27,11 @@ namespace aperture {
         screenWidth = 1200;
         screenHeight = 177;
         
+        screenWidth = 1024;
+        screenHeight = 1024;
         
         margin = 25;
-        gridSizeX = 12.5;
+        gridSizeX = 12;
         gridSizeY = (sqrt(3))*(float)gridSizeX/2.0f;
         offset = gridSizeX / 2;
         
@@ -37,7 +39,7 @@ namespace aperture {
         numRows = (screenHeight-margin*2)/gridSizeY + 2;
 
         mAnimState = 0;
-        skipFrames = 2;
+        skipFrames = 0;
         
         mContainer = View::create();
         getView()->addSubview(mContainer);
@@ -47,7 +49,7 @@ namespace aperture {
         
         for(int i=0;i<numRows;i++){
             for(int j=0;j<numCols;j++){
-                BubbleRef b = Bubble::create(12.5);
+                BubbleRef b = Bubble::create(12);
                 bubbles.push_back(b);
                 mContainer->addSubview(b);
                 
@@ -154,6 +156,16 @@ namespace aperture {
         ci::app::console() << key.getCode() << std::endl;
         switch(key.getCode()){
        
+                case 't':
+                case 'T':
+                numBubbles = bubbles.size();
+                ci::app::console() << "num subviews: " << numBubbles << std::endl;
+                for(int i=0;i<numBubbles;i++){
+                    BubbleRef b = bubbles.at(i);
+                    b->threshold();
+                }
+                break;
+                
                 case 'r':
                 case 'R':
                 numBubbles = bubbles.size();
@@ -178,7 +190,7 @@ namespace aperture {
                 ci::app::console() << "num subviews: " << numBubbles << std::endl;
                 for(int i=0;i<numBubbles;i++){
                     BubbleRef b = bubbles.at(i);
-                    b->setDestSize(12.5f);
+                    b->setDestSize(12);
                 }
                 break;
 
@@ -198,7 +210,7 @@ namespace aperture {
                 for(int i=0;i<numBubbles;i++){
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI)*12.5f;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI)*12;
                     b->setDestSize(yScale);
                 }
                 break;
@@ -211,7 +223,7 @@ namespace aperture {
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
                     float xPos = b->getPosition().x;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-(float)xPos/16.0f)*12.5f;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI-(float)xPos/16.0f)*12;
                     b->setDestSize(yScale);
                 }
                 break;
@@ -223,7 +235,7 @@ namespace aperture {
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
                     float xPos = b->getPosition().x;
-                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+(float)xPos/2.0f)*12.5f;
+                    float yScale = sin(yPos/ci::app::getWindowHeight()*M_PI+(float)xPos/2.0f)*12;
                     b->setDestSize(yScale);
                 }
                 break;
@@ -235,7 +247,7 @@ namespace aperture {
                     BubbleRef b = bubbles.at(i);
                     float yPos = b->getPosition().y;
                     float xPos = b->getPosition().x;
-                    float yScale = sin(xPos/ci::app::getWindowWidth()*M_PI)*12.5f;
+                    float yScale = sin(xPos/ci::app::getWindowWidth()*M_PI)*12;
                     b->setDestSize(yScale);
                 }
                 break;
