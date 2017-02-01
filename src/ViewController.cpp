@@ -161,10 +161,56 @@ namespace aperture {
         
     }
     void ViewController::scrollLeft(){
-    // TODO: implement me
+        
+        // note: all scrolls assume there's a 50% offset every other line
+        int numBubbles = bubbles.size();
+        
+        float buffer[numBubbles];
+        
+        for(int i=0;i<numBubbles;i++){
+            buffer[i] = bubbles.at(i)->getDestSize();
+        }
+        
+        for(int j=0;j<numRows;j++){
+            for(int i=0;i<numCols;i++){
+                    int k = i + j*numCols;
+                    int l = i+1 + j*numCols;
+                    if(i==numCols-1){
+                        l = j*numCols; // wrap
+                    }
+                    BubbleRef b = bubbles.at(k);
+                    b->setDestSize(buffer[l]);
+            }
+        }
+      
+        
+
     }
     void ViewController::scrollRight(){
-    // TODO: implement me
+        
+        // note: all scrolls assume there's a 50% offset every other line
+        int numBubbles = bubbles.size();
+        
+        float buffer[numBubbles];
+        
+        for(int i=0;i<numBubbles;i++){
+            buffer[i] = bubbles.at(i)->getDestSize();
+        }
+        
+        for(int j=0;j<numRows;j++){
+            for(int i=0;i<numCols;i++){
+                int k = i + j*numCols;
+                int l = i-1 + j*numCols;
+                if(i==0){
+                    l = k+numCols-1; // wrap
+                }
+                BubbleRef b = bubbles.at(k);
+                b->setDestSize(buffer[l]);
+            }
+        }
+        
+        
+
     }
     
     void ViewController::threshold(){
