@@ -41,7 +41,7 @@ void Bubble::setup(int size)
     mSize = 1;
 
     //mShape = ShapeView::createCircle(mSize);
-    mShape = ShapeView::createRect(8.0f, 12.5f, 4.0f);
+    mShape = ShapeView::createRect(7.0f, 12.5f, 2.0f);
     mShape->setAlignment(Alignment::CENTER_CENTER);
 
     mColor = ci::Color(ci::CM_HSV, 1,0,1);
@@ -61,10 +61,12 @@ void Bubble::setup(int size)
 void Bubble::update(){
   //  ci::app::console() << "bubble update" << std::endl;
     mSize += (mDestSize-mSize)/mTweenVal;
+    mPos += (mDestPos-mPos)/mTweenVal;
+    mColorVal += (mDestColorVal-mColorVal)/mTweenVal;
     // mShape->setSize(ci::vec2(mSize));
-    mShape->setPosition(ci::vec2(0,(mSize-6.25f)*2.0f));
+    mShape->setPosition(ci::vec2(0,mPos*10.0f-5.0f));
     mShape->setScale(1.0f,mSize/12.5f);
-    mShape->setFillColor(ci::ColorA(1,1,1,mSize/12.5f));
+    mShape->setFillColor(ci::Color(mColorVal,mColorVal,mColorVal));
     // ci::app::console() << mSize << std::endl;
     // mShape->setFillColor(ci::Color(1,1,1));
 //    mShape->render();
@@ -105,6 +107,8 @@ void Bubble::highlightChildren(bool isHighlighted)
 
 void Bubble::randomize(){
     mDestSize = ci::randFloat(12);
+    mDestColorVal = ci::randFloat();
+    mDestPos = ci::randFloat();
 }
 void Bubble::shrink(){
     setDestSize(0.0f);

@@ -49,6 +49,10 @@ private:
     
     float mTweenVal;
     
+    float oPos;
+    float mPos, mDestPos;
+    float mColorVal, mDestColorVal;
+    
     // Circle Shape
     ShapeViewRef mShape;
     
